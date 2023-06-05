@@ -40,4 +40,9 @@ export class SpotifyPlaylistLoader {
         return tracks;
     }
 
+    public async getRelatedArtists(artistId: string) {
+        const result = await this.spotify.artists.relatedArtists(artistId);
+        return result.artists;
+    }
+
 }

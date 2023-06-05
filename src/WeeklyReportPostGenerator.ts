@@ -1,8 +1,6 @@
 import type { Recommendation } from "./types";
 
-export function generateMarkdown(recommendations: Recommendation[]) {
-    const date = new Date();
-
+export function generateMarkdown(date: Date, recommendations: Recommendation[]) {
     const paddedDate = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
     const paddedMonth = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
     const formattedDate = `${paddedDate}/${paddedMonth}/${date.getFullYear()}`;
@@ -28,7 +26,11 @@ ${recommendations.map(r => {
 const trackTemplate = (rec: Recommendation) => `
 ## ${rec.artist} - ${rec.track}
 
+<div data-spotify-uri="${rec.trackData.uri}"></div>
+
 [Listen on Spotify](${rec.url})
+
+FFO: ${rec.similarArtists.slice(0, 3).map(a => a.name).join(", ")}
 `.trimStart();
 
 
@@ -37,5 +39,9 @@ const albumTemplate = (rec: Recommendation) => `
 
 ${rec.artist}'s album came out this week, check out the track "${rec.track}".
 
+<div data-spotify-uri="${rec.trackData.uri}"></div>
+
 [Listen on Spotify](${rec.url})
+
+FFO: ${rec.similarArtists.slice(0, 3).map(a => a.name).join(", ")}
 `.trimStart();

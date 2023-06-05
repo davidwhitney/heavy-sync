@@ -14,10 +14,9 @@ if (process.argv.includes("--run")) {
 
 export async function main(): Promise<number> {
     const executionDate = new Date();
-    const year = executionDate.getFullYear();
 
     const spotifyConnection = new SpotifyPlaylistLoader();
-    const playlistId = await spotifyConnection.findCurrentYearPlaylistId(year);
+    const playlistId = await spotifyConnection.findCurrentYearPlaylistId(executionDate.getFullYear());
     const tracks = await spotifyConnection.getAllPlaylistItems(playlistId);
 
     const startDate = getStartOfPreviousSevenDayPeriod();
@@ -33,21 +32,14 @@ export async function main(): Promise<number> {
     const tracksGroupedByArtist = groupTracksByArtist(tracksAddedThisWeek);
     const recommendations = mapTracksToRecommendations(tracksGroupedByArtist);
 
-    const fromTemplate = generateMarkdown(recommendations);
-
-    // save to file
-    const outDir = path.join(__dirname, "..", "output");
-    const paddedDate = executionDate.getDate() < 10 ? `0${executionDate.getDate()}` : executionDate.getDate();
-    const paddedMonth = executionDate.getMonth() + 1 < 10 ? `0${executionDate.getMonth() + 1}` : executionDate.getMonth() + 1;
-
-    const fileName = `${year}${paddedDate}${paddedMonth}-new-music.md`;
-    const filePath = path.join(outDir, fileName);
-    if (!fs.existsSync(outDir)) {
-        fs.mkdirSync(outDir);
+    for (const rec of recommendations) {
+        const similarArtists = await spotifyConnection.getRelatedArtists(rec.trackData.artists[0].id);
+        rec.similarArtists = similarArtists;
     }
 
-    fs.writeFileSync(filePath, fromTemplate);
+    const fromTemplate = generateMarkdown(executionDate, recommendations);
 
+    saveToFile(executionDate, fromTemplate);
     return 0;
 }
 
@@ -77,6 +69,7 @@ function mapTracksToRecommendations(tracksGroupedByArtist: TracksGroupedByArtist
         // generate recommendation object
         return {
             artist,
+            similarArtists: [],
             trackData: highestPopularityTrack,
             track: highestPopularityTrack.name,
             album: highestPopularityTrack.album.name,
@@ -86,6 +79,17 @@ function mapTracksToRecommendations(tracksGroupedByArtist: TracksGroupedByArtist
     });
 }
 
-function saveToFile() {
-    
+function saveToFile(executionDate: Date, fromTemplate: string) {
+    // save to file
+    const outDir = path.join(__dirname, "..", "output");
+    const paddedDate = executionDate.getDate() < 10 ? `0${executionDate.getDate()}` : executionDate.getDate();
+    const paddedMonth = executionDate.getMonth() + 1 < 10 ? `0${executionDate.getMonth() + 1}` : executionDate.getMonth() + 1;
+
+    const fileName = `${executionDate.getFullYear()}${paddedMonth}${paddedDate}-new-music.md`;
+    const filePath = path.join(outDir, fileName);
+    if (!fs.existsSync(outDir)) {
+        fs.mkdirSync(outDir);
+    }
+
+    fs.writeFileSync(filePath, fromTemplate);
 }
