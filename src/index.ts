@@ -1,7 +1,11 @@
 import * as dotenv from "dotenv";
 import { SpotifyPlaylistLoader } from "./SpotifyPlaylistLoader";
-import { TrackWithAlbum } from "@spotify/web-api-ts-sdk/dist/mjs/types";
+import { PlaylistedTrack } from "@spotify/web-api-ts-sdk/dist/mjs/types";
 import { getStartOfPreviousSevenDayPeriod } from "./DateUtils";
+import { generateMarkdown } from "./WeeklyReportPostGenerator";
+import type { Recommendation, TracksGroupedByArtist } from "./types";
+import * as fs from "fs";
+import * as path from "path";
 dotenv.config();
 
 if (process.argv.includes("--run")) {
@@ -26,7 +30,27 @@ export async function main(): Promise<number> {
 
     console.log("Tracks added this week: ", tracksAddedThisWeek.length);
 
-    const tracksGroupedByArtist = tracksAddedThisWeek.reduce((acc, t) => {
+    const tracksGroupedByArtist = groupTracksByArtist(tracksAddedThisWeek);
+    const recommendations = mapTracksToRecommendations(tracksGroupedByArtist);
+
+    const fromTemplate = generateMarkdown(recommendations);
+
+    // save to file
+    const outDir = path.join(__dirname, "..", "output");
+    const filePath = path.join(outDir, `${year}-week-${startDate.getDate()}-${startDate.getMonth() + 1}.md`);
+    if (!fs.existsSync(outDir)) {
+        fs.mkdirSync(outDir);
+    }
+
+    fs.writeFileSync(filePath, fromTemplate);
+
+
+    return 0;
+}
+
+
+function groupTracksByArtist(tracksAddedThisWeek: PlaylistedTrack[]) {
+    return tracksAddedThisWeek.reduce((acc, t) => {
         const artist = t.track.artists[0].name;
         if (!acc[artist]) {
             acc[artist] = [];
@@ -34,11 +58,11 @@ export async function main(): Promise<number> {
 
         acc[artist].push(t.track);
         return acc;
-    }, {} as { [artist: string]: TrackWithAlbum[] });
+    }, {} as TracksGroupedByArtist);
+}
 
-
-    // generate recommendations by picking the track with the highest "popularity" value from each of the groups
-    const recommendations = Object.keys(tracksGroupedByArtist).map((artist) => {
+function mapTracksToRecommendations(tracksGroupedByArtist: TracksGroupedByArtist): Recommendation[] {
+    return Object.keys(tracksGroupedByArtist).map((artist) => {
         const tracks = tracksGroupedByArtist[artist];
         const highestPopularityTrack = tracks.reduce((acc, t) => {
             if (t.popularity > acc.popularity) {
@@ -49,7 +73,7 @@ export async function main(): Promise<number> {
         }, tracks[0]);
 
         // generate recommendation object
-        const reccomendation = {
+        return {
             artist,
             trackData: highestPopularityTrack,
             track: highestPopularityTrack.name,
@@ -57,13 +81,5 @@ export async function main(): Promise<number> {
             url: highestPopularityTrack.external_urls.spotify,
             isFromAlbum: highestPopularityTrack.album.album_type === "album",
         };
-
-        return reccomendation;
     });
-
-    console.log("Recommendations: ", recommendations.length);
-    console.log("Recommendations: ", recommendations);
-
-
-    return 0;
 }
