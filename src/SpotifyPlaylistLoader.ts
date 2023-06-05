@@ -31,8 +31,7 @@ export class SpotifyPlaylistLoader {
                 break;
             }
 
-            const asPlaylistedTrack = playlistContents.items as any as PlaylistedTrack[]; // bugfix required to SDK.
-            tracks.push(...asPlaylistedTrack);
+            tracks.push(...playlistContents.items);
         }
 
         console.log(`Found ${tracks.length} tracks.`);

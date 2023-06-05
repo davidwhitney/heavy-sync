@@ -37,17 +37,19 @@ export async function main(): Promise<number> {
 
     // save to file
     const outDir = path.join(__dirname, "..", "output");
-    const filePath = path.join(outDir, `${year}-week-${startDate.getDate()}-${startDate.getMonth() + 1}.md`);
+    const paddedDate = executionDate.getDate() < 10 ? `0${executionDate.getDate()}` : executionDate.getDate();
+    const paddedMonth = executionDate.getMonth() + 1 < 10 ? `0${executionDate.getMonth() + 1}` : executionDate.getMonth() + 1;
+
+    const fileName = `${year}${paddedDate}${paddedMonth}-new-music.md`;
+    const filePath = path.join(outDir, fileName);
     if (!fs.existsSync(outDir)) {
         fs.mkdirSync(outDir);
     }
 
     fs.writeFileSync(filePath, fromTemplate);
 
-
     return 0;
 }
-
 
 function groupTracksByArtist(tracksAddedThisWeek: PlaylistedTrack[]) {
     return tracksAddedThisWeek.reduce((acc, t) => {
@@ -82,4 +84,8 @@ function mapTracksToRecommendations(tracksGroupedByArtist: TracksGroupedByArtist
             isFromAlbum: highestPopularityTrack.album.album_type === "album",
         };
     });
+}
+
+function saveToFile() {
+    
 }

@@ -2,7 +2,10 @@ import type { Recommendation } from "./types";
 
 export function generateMarkdown(recommendations: Recommendation[]) {
     const date = new Date();
-    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+    const paddedDate = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    const paddedMonth = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const formattedDate = `${paddedDate}/${paddedMonth}/${date.getFullYear()}`;
 
     const orderedByPopularity = recommendations.sort((a, b) => b.trackData.popularity - a.trackData.popularity);
 
@@ -32,7 +35,7 @@ const trackTemplate = (rec: Recommendation) => `
 const albumTemplate = (rec: Recommendation) => `
 ## ${rec.artist} - ${rec.album} (ALBUM)
 
-${rec.artist}'s track came out this week, check out "${rec.track}".
+${rec.artist}'s album came out this week, check out the track "${rec.track}".
 
 [Listen on Spotify](${rec.url})
 `.trimStart();
