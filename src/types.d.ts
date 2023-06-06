@@ -1,5 +1,9 @@
 import { Artist, TrackWithAlbum } from "@spotify/web-api-ts-sdk/dist/mjs/types";
 
+interface Args {
+    date: Date;
+}
+
 interface IOutputWriter {
     save(executionDate: Date, fromTemplate: string): void;
 }
