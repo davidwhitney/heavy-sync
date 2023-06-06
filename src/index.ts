@@ -11,17 +11,15 @@ export async function main(args: Args): Promise<number> {
     const clientId = process.env.SPOTIFY_CLIENT_ID!;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
 
-    const weekEndingDate = args.date;
-
     const spotify = SpotifyApi.withClientCredentials(clientId, clientSecret);
     const playlistLoader = new SpotifyPlaylistLoader(spotify);
     const recommendationGenerator = new RecommendationGenerator(playlistLoader);
     const output = new FileSystemWriter();
 
-    const recommendations = await recommendationGenerator.execute(weekEndingDate);
-    const fromTemplate = generateMarkdown(weekEndingDate, recommendations);
+    const recommendations = await recommendationGenerator.execute(args.date);
+    const fromTemplate = generateMarkdown(args.date, recommendations);
 
-    output.save(weekEndingDate, fromTemplate);
+    output.save(args.date, fromTemplate);
     return 0;
 }
 
