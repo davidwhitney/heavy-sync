@@ -1,8 +1,14 @@
 import { Artist, TrackWithAlbum } from "@spotify/web-api-ts-sdk/dist/mjs/types";
 
-export type TracksGroupedByArtist = { [artist: string]: TrackWithAlbum[] };
+interface IOutputWriter {
+    save(executionDate: Date, fromTemplate: string): void;
+}
 
-export type Recommendation = {
+interface TracksGroupedByArtist {
+    [artist: string]: TrackWithAlbum[]
+}
+
+interface Recommendation {
     similarArtists: Artist[];
     artist: string;
     trackData: TrackWithAlbum;
@@ -10,4 +16,4 @@ export type Recommendation = {
     album: string;
     url: string;
     isFromAlbum: boolean;
-};
+}
