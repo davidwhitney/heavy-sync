@@ -15,8 +15,4 @@ temp
 TODOs.md
 .eslintcache
 /*.env
-/example/.env
-/example_node/.env
-/screenshots
-/example_react/.env
-/output
+output
