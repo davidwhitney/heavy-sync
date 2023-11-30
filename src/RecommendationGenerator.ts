@@ -1,10 +1,11 @@
-import { PlaylistedTrack } from "@spotify/web-api-ts-sdk/dist/mjs/types";
+import type { PlaylistedTrack, Track } from "@spotify/web-api-ts-sdk";
 import { SpotifyPlaylistLoader } from "./input/SpotifyPlaylistLoader";
 import type { Recommendation, TracksGroupedByArtist } from "./types";
+import { Inject } from "cruet";
 
 export class RecommendationGenerator {
 
-    constructor(private playlistLoader: SpotifyPlaylistLoader) {
+    constructor(@Inject("SpotifyPlaylistLoader") private playlistLoader: SpotifyPlaylistLoader) {
     }
 
     public async execute(effectiveDate: Date) {
@@ -26,12 +27,13 @@ export class RecommendationGenerator {
 
     private groupTracksByArtist(tracksAddedThisWeek: PlaylistedTrack[]) {
         return tracksAddedThisWeek.reduce((acc, t) => {
-            const artist = t.track.artists[0].name;
+            const track = t.track! as Track;
+            const artist = track.artists[0].name;
             if (!acc[artist]) {
                 acc[artist] = [];
             }
 
-            acc[artist].push(t.track);
+            acc[artist].push(track);
             return acc;
         }, {} as TracksGroupedByArtist);
     }

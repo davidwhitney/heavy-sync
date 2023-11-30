@@ -1,4 +1,4 @@
-import { Artist, TrackWithAlbum } from "@spotify/web-api-ts-sdk/dist/mjs/types";
+import { Artist, Track } from "@spotify/web-api-ts-sdk/dist/mjs/types";
 
 interface Args {
     date: Date;
@@ -9,13 +9,13 @@ interface IOutputWriter {
 }
 
 interface TracksGroupedByArtist {
-    [artist: string]: TrackWithAlbum[]
+    [artist: string]: Track[]
 }
 
 interface Recommendation {
     similarArtists: Artist[];
     artist: string;
-    trackData: TrackWithAlbum;
+    trackData: Track;
     track: string;
     album: string;
     url: string;

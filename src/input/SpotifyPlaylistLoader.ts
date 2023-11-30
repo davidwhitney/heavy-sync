@@ -1,9 +1,10 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { Page, PlaylistedTrack } from "@spotify/web-api-ts-sdk/dist/mjs/types";
+import { Inject } from "cruet";
 
-export class SpotifyPlaylistLoader {
+export class SpotifyPlaylistLoader {  
 
-    constructor(private spotify: SpotifyApi) {
+    constructor(@Inject("SpotifyApi") private spotify: SpotifyApi) {
     }
 
     public async getPlaylistedTracksBetween(startDate: Date, endDate: Date) {
@@ -14,11 +15,16 @@ export class SpotifyPlaylistLoader {
 
         for await (const t of this.getAllPlaylistItems(playlistId)) {
             const addedDate = new Date(t.added_at);
+
             if (addedDate >= startDate && addedDate <= endDate) {
+                console.log("[Added] track: ", t.track.name);
                 tracksInPeriod.push(t);
+            } else {
+                console.log("[SKIPPED] track: ", t.track.name);
             }
         }
 
+        console.log(`Fetched tracks added between: ${startDate.toString()} AND ${endDate.toString()}`);
         console.log("Tracks added this period: ", tracksInPeriod.length);
 
         return tracksInPeriod;

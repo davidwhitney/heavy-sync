@@ -1,34 +1,29 @@
+import { Container } from "cruet";
 import * as dotenv from "dotenv";
-import { generateMarkdown } from "./WeeklyReportPostGenerator";
-import { RecommendationGenerator } from "./RecommendationGenerator";
-import { SpotifyPlaylistLoader } from "./input/SpotifyPlaylistLoader";
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import { FileSystemWriter } from "./writers/FileSystemWriter";
-import type { Args } from "./types";
+import { ContainerConfiguration } from "./ContainerConfiguration";
+import { GenerateRecommendationsCommand } from "./GenerateRecommendationsCommand";
+import { Args } from "./types";
+
 dotenv.config();
 
 export async function main(args: Args): Promise<number> {
-    const clientId = process.env.SPOTIFY_CLIENT_ID!;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
+    const container = new Container();
+    container.addModule(new ContainerConfiguration());
 
-    const spotify = SpotifyApi.withClientCredentials(clientId, clientSecret);
-    const playlistLoader = new SpotifyPlaylistLoader(spotify);
-    const recommendationGenerator = new RecommendationGenerator(playlistLoader);
-    const output = new FileSystemWriter();
-
-    const recommendations = await recommendationGenerator.execute(args.date);
-    const fromTemplate = generateMarkdown(args.date, recommendations);
-
-    output.save(args.date, fromTemplate);
+    const command = container.get<GenerateRecommendationsCommand>("GenerateRecommendationsCommand");
+    command.execute(args);
     return 0;
 }
 
 if (process.argv.includes("--run")) {
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+
     const args = {
         date: process.argv.includes("--date")
             ? new Date(process.argv[process.argv.indexOf("--date") + 1])
-            : new Date()
+            : endOfToday
     };
 
-    main(args);
+    main(args).then(code => process.exit(code));
 }
