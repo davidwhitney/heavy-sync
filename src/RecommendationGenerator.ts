@@ -1,5 +1,5 @@
 import type { PlaylistedTrack, Track } from "@spotify/web-api-ts-sdk";
-import { SpotifyPlaylistLoader } from "./input/SpotifyPlaylistLoader";
+import { SpotifyPlaylistLoader } from "./SpotifyPlaylistLoader";
 import type { Recommendation, TracksGroupedByArtist } from "./types";
 import { Inject } from "cruet";
 
@@ -12,10 +12,13 @@ export class RecommendationGenerator {
         const startDate = this.getStartOfPreviousSevenDayPeriod(effectiveDate);
         const endDate = new Date(effectiveDate);
 
-        const tracksAddedThisWeek = await this.playlistLoader.getPlaylistedTracksBetween(startDate, endDate);
+        console.log(`Fetching tracks added between ${startDate.toString()} and ${endDate.toString()}`);
 
+        const tracksAddedThisWeek = await this.playlistLoader.getPlaylistedTracksBetween(startDate, endDate);
         const tracksGroupedByArtist = this.groupTracksByArtist(tracksAddedThisWeek);
         const recommendations = this.mapTracksToRecommendations(tracksGroupedByArtist);
+
+        console.log(`Found ${tracksAddedThisWeek.length} tracks added between ${startDate.toString()} and ${endDate.toString()}`);
 
         for (const rec of recommendations) {
             const similarArtists = await this.playlistLoader.getRelatedArtists(rec.trackData.artists[0].id);

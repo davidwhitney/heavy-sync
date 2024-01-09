@@ -1,7 +1,7 @@
 import { Inject } from "cruet";
 import { Args } from "./types";
 import { RecommendationGenerator } from "./RecommendationGenerator";
-import { FileSystemWriter } from "./writers/FileSystemWriter";
+import { FileSystemWriter } from "./FileSystemWriter";
 import type { Recommendation } from "./types";
 
 export class GenerateRecommendationsCommand {

@@ -1,5 +1,12 @@
 import { Artist, Track } from "@spotify/web-api-ts-sdk/dist/mjs/types";
 
+interface Options {
+    run?: boolean;
+    date?: Date;
+    from?: Date;
+    to?: Date;
+}
+
 interface Args {
     date: Date;
 }
