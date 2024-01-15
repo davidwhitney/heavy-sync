@@ -3,7 +3,6 @@ import { RecommendationGenerator } from "../recommendations/RecommendationGenera
 import { SpotifyPlaylistLoader } from "../recommendations/SpotifyPlaylistLoader";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { FileSystemWriter } from "../output-generation/FileSystemWriter";
-import { GenerateRecommendationsCommand } from "../recommendations/GenerateRecommendationsCommand";
 import { MarkdownFormatter } from "../output-generation/MarkdownFormatter";
 
 export class ContainerConfiguration implements IRegistrationModule {
@@ -16,7 +15,5 @@ export class ContainerConfiguration implements IRegistrationModule {
         container.register(RecommendationGenerator);
         container.register("IOutputWriter", FileSystemWriter);
         container.register("IOutputFormatter", MarkdownFormatter);
-
-        container.register(GenerateRecommendationsCommand);
     }
 }
