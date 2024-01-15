@@ -13,7 +13,7 @@ export class ContainerConfiguration implements IRegistrationModule {
         container.register("SpotifyApi", () => SpotifyApi.withClientCredentials(clientId, clientSecret));
         container.register(SpotifyPlaylistLoader);
         container.register(RecommendationGenerator);
-        container.register(FileSystemWriter);
+        container.register("IOutputWriter", FileSystemWriter);
 
         container.register(GenerateRecommendationsCommand);
     }

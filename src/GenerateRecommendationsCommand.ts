@@ -1,13 +1,12 @@
 import { Inject } from "cruet";
 import { Args } from "./types";
 import { RecommendationGenerator } from "./RecommendationGenerator";
-import { FileSystemWriter } from "./FileSystemWriter";
-import type { Recommendation } from "./types";
+import type { IOutputWriter, Recommendation } from "./types";
 
 export class GenerateRecommendationsCommand {
     constructor(
         @Inject("RecommendationGenerator") private generator: RecommendationGenerator,
-        @Inject("FileSystemWriter") private writer: FileSystemWriter,
+        @Inject("IOutputWriter") private writer: IOutputWriter,
     ) {
     }
 
