@@ -1,7 +1,6 @@
 import { Inject } from "cruet";
-import { Args } from "./types";
 import { RecommendationGenerator } from "./RecommendationGenerator";
-import type { IOutputWriter, Recommendation } from "./types";
+import type { IOutputWriter, Options, Recommendation } from "./types";
 
 export class GenerateRecommendationsCommand {
     constructor(
@@ -10,7 +9,7 @@ export class GenerateRecommendationsCommand {
     ) {
     }
 
-    public async execute(args: Args) {
+    public async execute(args: Options) {
         const recommendations = await this.generator.execute(args.date);
         const fromTemplate = this.generateMarkdown(args.date, recommendations);
         this.writer.save(args.date, fromTemplate);

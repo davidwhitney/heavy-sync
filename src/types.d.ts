@@ -7,10 +7,6 @@ interface Options {
     to?: Date;
 }
 
-interface Args {
-    date: Date;
-}
-
 interface IOutputWriter {
     save(executionDate: Date, fromTemplate: string): void;
 }
