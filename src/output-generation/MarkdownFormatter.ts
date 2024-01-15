@@ -1,18 +1,16 @@
-import { Inject } from "cruet";
 import type { IOutputFormatter, Recommendation } from "../types";
 
 export class MarkdownFormatter implements IOutputFormatter {
     public generate(date: Date, recommendations: Recommendation[]) {
-        const paddedDate = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-        const paddedMonth = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-        const formattedDate = `${paddedDate}/${paddedMonth}/${date.getFullYear()}`;
+        const paddedDate = new String(date.getDate()).padStart(2, "0");
+        const paddedMonth = new String(date.getMonth() + 1).padStart(2, "0");
 
         const orderedByPopularity = recommendations.sort((a, b) => b.trackData.popularity - a.trackData.popularity);
 
+        const formattedDate = `${paddedDate}/${paddedMonth}/${date.getFullYear()}`;
         return template(formattedDate, orderedByPopularity);
     }
 }
-
 
 const template = (date: string, recommendations: Recommendation[]) => `
 ${date} 00:10:00 AM
