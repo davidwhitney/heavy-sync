@@ -17,8 +17,8 @@ if (options.run) {
 
 export async function main(args: Options, container: Container): Promise<number> {
     const generator = container.get<RecommendationGenerator>(RecommendationGenerator);
-    const writer = container.get<IOutputWriter>("IOutputWriter");
     const formatter = container.get<IOutputFormatter>("IOutputFormatter");
+    const writer = container.get<IOutputWriter>("IOutputWriter");
 
     const recommendations = await generator.execute(args.date);
     const fromTemplate = formatter.generate(args.date, recommendations);
