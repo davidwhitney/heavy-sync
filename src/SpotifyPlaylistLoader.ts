@@ -56,6 +56,7 @@ export class SpotifyPlaylistLoader {
 
         do {
             contents = await this.spotify.playlists.getPlaylistItems(playlistId, undefined, undefined, undefined, recieveCount);
+
             if (!contents || !contents.items) {
                 break;
             }
