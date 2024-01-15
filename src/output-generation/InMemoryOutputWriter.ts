@@ -1,6 +1,6 @@
 import { IOutputWriter } from "../types";
 
-export class StubOutputWriter implements IOutputWriter {
+export class InMemoryOutputWriter implements IOutputWriter {
     private _executionDate: Date | undefined;
     private _data: string | undefined;
 
