@@ -1,1 +1,0 @@
-schtasks /create /tn "heavy-sync" /tr "PowerShell.exe -executionpolicy bypass -File c:/apps/heavy-sync/dist/Start.ps1" /sc daily /mo 7 /it /f

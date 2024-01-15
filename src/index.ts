@@ -7,18 +7,19 @@ import { RecommendationGenerator } from "./recommendations/RecommendationGenerat
 
 dotenv.config();
 
-const container = new Container();
+export const container = new Container();
 container.addModule(new ContainerConfiguration());
+
 const options: Options = parseOptions(process.argv);
 
 if (options.run) {
     main(options, container).then(code => process.exit(code));
 }
 
-export async function main(args: Options, container: Container): Promise<number> {
-    const generator = container.get<RecommendationGenerator>(RecommendationGenerator);
-    const formatter = container.get<IOutputFormatter>("IOutputFormatter");
-    const writer = container.get<IOutputWriter>("IOutputWriter");
+export async function main(args: Options, currentContainer: Container): Promise<number> {
+    const generator = currentContainer.get<RecommendationGenerator>(RecommendationGenerator);
+    const formatter = currentContainer.get<IOutputFormatter>("IOutputFormatter");
+    const writer = currentContainer.get<IOutputWriter>("IOutputWriter");
 
     const recommendations = await generator.execute(args.date);
     const fromTemplate = formatter.generate(args.date, recommendations);

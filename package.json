@@ -2,13 +2,15 @@
   "name": "heavy-sync",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.functionapp.js",
   "scripts": {
     "start": "tsx src/index.ts --run",
     "test": "vitest --run",
-    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist && xcopy deploy\\*.* dist /F /-I /Y && xcopy .env dist\\.env /F /-I /Y",
-    "deploy": "scp -rp dist Administrator@redqueen:c:\\apps\\heavy-sync",
-    "publish": "npm run build && npm run deploy"
+    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
+    "build:azure": "tsc --project tsconfig.functionapp.json",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start:func": "func start"
   },
   "author": "",
   "license": "ISC",
@@ -18,10 +20,13 @@
     "cruet": "^0.2.1",
     "dotenv": "^16.3.1",
     "tsx": "^4.6.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",    
+    "@azure/functions": "^4.0.0"
   },
   "devDependencies": {
+    "azure-functions-core-tools": "^4.x",
     "esbuild": "^0.19.11",
-    "vitest": "^0.31.4"
+    "vitest": "^0.31.4",
+    "rimraf": "^5.0.0"
   }
 }
