@@ -1,25 +1,18 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { main } from './index';
 import { Container } from 'cruet';
-import { ContainerConfiguration } from './ContainerConfiguration';
-import { FakeSpotifyApi } from './test-support/FakeSpotifyApi';
-import { StubOutputWriter } from './test-support/StubOutputWriter';
+import { TestContainerConfiguration } from './test-support/TestContainerConfiguration';
 import { PlaylistedTrack, SimplifiedAlbum, SimplifiedArtist, Track } from '@spotify/web-api-ts-sdk';
 
 describe('index', () => {
 
     let container: Container;
-    let outputWriter: StubOutputWriter;
-    let spotifyApi: FakeSpotifyApi;
+    let testConfig: TestContainerConfiguration;
 
     beforeEach(() => {
-        outputWriter = new StubOutputWriter();
-        spotifyApi = new FakeSpotifyApi();
-
+        testConfig = new TestContainerConfiguration();
         container = new Container();
-        container.addModule(new ContainerConfiguration());
-        container.reregister("SpotifyApi", spotifyApi);
-        container.reregister("IOutputWriter", outputWriter);
+        container.addModule(testConfig);
     });
 
     it('called, exit code should be 0', async () => {
@@ -31,17 +24,18 @@ describe('index', () => {
 
     it('called, saves file on output writer', async () => {
         const args = { date: new Date("2023-05-28") };
+        
         await main(args, container);
 
-        expect(outputWriter.hasSaved).toBe(true);
-        expect(outputWriter.executionDate?.toISOString()).toBe("2023-05-28T00:00:00.000Z");
-        expect(outputWriter.data).not.toBe("");
+        expect(testConfig.outputWriter.hasSaved).toBe(true);
+        expect(testConfig.outputWriter.executionDate?.toISOString()).toBe("2023-05-28T00:00:00.000Z");
+        expect(testConfig.outputWriter.data).not.toBe("");
     });
 
     it('track available in playlist that was added less than seven days ago, exists in output', async () => {
         const args = { date: new Date("2023-05-28") };
 
-        spotifyApi.returnedPlaylistContains({
+        testConfig.spotifyApi.returnedPlaylistContains({
             track: {
                 name: "track1",
                 artists: [{ name: "artist1" } as SimplifiedArtist],
@@ -53,14 +47,14 @@ describe('index', () => {
 
         await main(args, container);
 
-        expect(outputWriter.data).toContain("track1");
-        expect(outputWriter.data).toContain("http://tempuri.org/the-url");
+        expect(testConfig.outputWriter.data).toContain("track1");
+        expect(testConfig.outputWriter.data).toContain("http://tempuri.org/the-url");
     });
 
     it('multiple tracks available in playlist that was added less than seven days ago, exists in output', async () => {
         const args = { date: new Date("2023-05-28") };
 
-        spotifyApi.returnedPlaylistContains([
+        testConfig.spotifyApi.returnedPlaylistContains([
             {
                 track: {
                     name: "track1",
@@ -83,10 +77,10 @@ describe('index', () => {
 
         await main(args, container);
 
-        expect(outputWriter.data).toContain("track1");
-        expect(outputWriter.data).toContain("http://tempuri.org/the-url1");
+        expect(testConfig.outputWriter.data).toContain("track1");
+        expect(testConfig.outputWriter.data).toContain("http://tempuri.org/the-url1");
 
-        expect(outputWriter.data).toContain("track2");
-        expect(outputWriter.data).toContain("http://tempuri.org/the-url2");
+        expect(testConfig.outputWriter.data).toContain("track2");
+        expect(testConfig.outputWriter.data).toContain("http://tempuri.org/the-url2");
     });
 });
