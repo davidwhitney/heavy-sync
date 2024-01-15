@@ -11,18 +11,15 @@ export class SpotifyPlaylistLoader {
         const year = startDate.getFullYear();
         const playlistId = await this.findCurrentYearPlaylistId(year);
 
-        const tracksInPeriod: PlaylistedTrack[] = [];
-
         console.log("Filitering tracks added between: ", startDate.toString(), " AND ", endDate.toString());
 
+        const tracksInPeriod: PlaylistedTrack[] = [];
         for await (const t of this.getAllPlaylistItems(playlistId)) {
             const addedDate = new Date(t.added_at);
 
             if (addedDate >= startDate && addedDate <= endDate) {
                 console.log("[Added] track: ", t.track.name);
                 tracksInPeriod.push(t);
-            } else {
-                //console.log("[SKIPPED] track: ", t.track.name);
             }
         }
 
@@ -37,7 +34,6 @@ export class SpotifyPlaylistLoader {
 
         const playlists = await this.spotify.playlists.getUsersPlaylists("davidwhitney");
         const specificPlaylist = playlists.items.find((p: { name: string; }) => p.name.toLowerCase() === `${year} new music`);
-
 
         if (!specificPlaylist) {
             throw new Error(`No playlist found for ${year}`);

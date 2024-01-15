@@ -24,12 +24,17 @@ describe('index', () => {
 
     it('called, saves file on output writer', async () => {
         const args = { date: new Date("2023-05-28") };
-        
+
         await main(args, container);
 
         expect(testConfig.outputWriter.hasSaved).toBe(true);
         expect(testConfig.outputWriter.executionDate?.toISOString()).toBe("2023-05-28T00:00:00.000Z");
         expect(testConfig.outputWriter.data).not.toBe("");
+    });
+
+    it('called, no playlist for year, throws', async () => {
+        const args = { date: new Date("1999-05-05") };
+        await expect(main(args, container)).rejects.toThrowError("No playlist found for 1999");
     });
 
     it('track available in playlist that was added less than seven days ago, exists in output', async () => {
