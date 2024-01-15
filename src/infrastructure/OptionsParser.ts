@@ -1,4 +1,4 @@
-import { Options } from "./types";
+import { Options } from "../types";
 import commandLineArgs from 'command-line-args';
 
 export function parseOptions(args: string[]): Options {

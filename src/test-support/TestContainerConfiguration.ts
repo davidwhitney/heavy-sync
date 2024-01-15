@@ -1,5 +1,5 @@
 import { Container } from "cruet";
-import { ContainerConfiguration } from '../ContainerConfiguration';
+import { ContainerConfiguration } from '../infrastructure/ContainerConfiguration';
 import { FakeSpotifyApi } from './FakeSpotifyApi';
 import { StubOutputWriter } from './StubOutputWriter';
 

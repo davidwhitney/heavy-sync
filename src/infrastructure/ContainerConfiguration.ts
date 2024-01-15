@@ -1,9 +1,10 @@
 import { Container, IRegistrationModule } from "cruet";
-import { RecommendationGenerator } from "./RecommendationGenerator";
-import { SpotifyPlaylistLoader } from "./SpotifyPlaylistLoader";
+import { RecommendationGenerator } from "../recommendations/RecommendationGenerator";
+import { SpotifyPlaylistLoader } from "../recommendations/SpotifyPlaylistLoader";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import { FileSystemWriter } from "./FileSystemWriter";
-import { GenerateRecommendationsCommand } from "./GenerateRecommendationsCommand";
+import { FileSystemWriter } from "../output-generation/FileSystemWriter";
+import { GenerateRecommendationsCommand } from "../recommendations/GenerateRecommendationsCommand";
+import { MarkdownFormatter } from "../output-generation/MarkdownFormatter";
 
 export class ContainerConfiguration implements IRegistrationModule {
     public registerComponents(container: Container): void {
@@ -14,6 +15,7 @@ export class ContainerConfiguration implements IRegistrationModule {
         container.register(SpotifyPlaylistLoader);
         container.register(RecommendationGenerator);
         container.register("IOutputWriter", FileSystemWriter);
+        container.register("IOutputFormatter", MarkdownFormatter);
 
         container.register(GenerateRecommendationsCommand);
     }

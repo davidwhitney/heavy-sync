@@ -11,6 +11,10 @@ interface IOutputWriter {
     save(executionDate: Date, fromTemplate: string): void;
 }
 
+interface IOutputFormatter {
+    generate(date: Date, recommendations: Recommendation[]): string;
+}
+
 interface TracksGroupedByArtist {
     [artist: string]: Track[]
 }

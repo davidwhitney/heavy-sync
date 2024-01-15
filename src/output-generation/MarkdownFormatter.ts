@@ -1,22 +1,8 @@
 import { Inject } from "cruet";
-import { RecommendationGenerator } from "./RecommendationGenerator";
-import type { IOutputWriter, Options, Recommendation } from "./types";
+import type { IOutputFormatter, Recommendation } from "../types";
 
-export class GenerateRecommendationsCommand {
-    constructor(
-        @Inject("RecommendationGenerator") private generator: RecommendationGenerator,
-        @Inject("IOutputWriter") private writer: IOutputWriter,
-    ) {
-    }
-
-    public async execute(args: Options) {
-        const recommendations = await this.generator.execute(args.date);
-        const fromTemplate = this.generateMarkdown(args.date, recommendations);
-        this.writer.save(args.date, fromTemplate);
-        return 0;
-    }
-
-    private generateMarkdown(date: Date, recommendations: Recommendation[]) {
+export class MarkdownFormatter implements IOutputFormatter {
+    public generate(date: Date, recommendations: Recommendation[]) {
         const paddedDate = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
         const paddedMonth = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
         const formattedDate = `${paddedDate}/${paddedMonth}/${date.getFullYear()}`;

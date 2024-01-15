@@ -1,6 +1,6 @@
 import type { PlaylistedTrack, Track } from "@spotify/web-api-ts-sdk";
 import { SpotifyPlaylistLoader } from "./SpotifyPlaylistLoader";
-import type { Recommendation, TracksGroupedByArtist } from "./types";
+import type { Recommendation, TracksGroupedByArtist } from "../types";
 import { Inject } from "cruet";
 
 export class RecommendationGenerator {

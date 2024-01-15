@@ -24,7 +24,7 @@ describe('Options parser', () => {
     it('no date provided, defaults to end of today', async () => {
         const today = new Date();
         today.setHours(23, 59, 59, 999);
-        
+
         const options = parseOptions([]);
 
         expect(options.date?.toISOString()).toBe(today.toISOString());

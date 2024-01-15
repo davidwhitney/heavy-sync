@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { IOutputWriter } from "./types";
+import type { IOutputWriter } from "../types";
 
 export class FileSystemWriter implements IOutputWriter {
 

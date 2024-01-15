@@ -1,9 +1,9 @@
 import * as dotenv from "dotenv";
 import { Container } from "cruet";
-import { ContainerConfiguration } from "./ContainerConfiguration";
-import { GenerateRecommendationsCommand } from "./GenerateRecommendationsCommand";
+import { ContainerConfiguration } from "./infrastructure/ContainerConfiguration";
+import { GenerateRecommendationsCommand } from "./recommendations/GenerateRecommendationsCommand";
 import { Options } from "./types";
-import { parseOptions } from "./OptionsParser";
+import { parseOptions } from "./infrastructure/OptionsParser";
 
 dotenv.config();
 const container = new Container();
