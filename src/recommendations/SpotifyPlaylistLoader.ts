@@ -53,11 +53,7 @@ export class SpotifyPlaylistLoader {
         do {
             contents = await this.spotify.playlists.getPlaylistItems(playlistId, undefined, undefined, undefined, recieveCount);
 
-            if (!contents || !contents.items) {
-                break;
-            }
-
-            for (const item of contents.items) {
+            for (const item of contents?.items) {
                 yield item;
                 items.push(item);
                 recieveCount++;

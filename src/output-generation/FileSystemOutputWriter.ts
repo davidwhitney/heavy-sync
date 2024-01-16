@@ -2,12 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import type { IOutputWriter } from "../types";
 
-export class FileSystemWriter implements IOutputWriter {
+export class FileSystemOutputWriter implements IOutputWriter {
     constructor(private outDir: string = null) {
         this.outDir = outDir || path.join(__dirname, "..", "output");
+        console.log("FileSystemOutputWriter Created.");
+        console.log(`Output directory: ${this.outDir}`);
     }
 
-    public save(executionDate: Date, fromTemplate: string) {
+    public async save(executionDate: Date, fromTemplate: string): Promise<void> {
         const paddedDate = new String(executionDate.getDate()).padStart(2, "0");
         const paddedMonth = new String(executionDate.getMonth() + 1).padStart(2, "0");
 
@@ -18,5 +20,9 @@ export class FileSystemWriter implements IOutputWriter {
         }
 
         fs.writeFileSync(filePath, fromTemplate);
+
+        console.log("FileSystemOutputWriter: Saved data to file - ", filePath);
+
+        return Promise.resolve();
     }
 }

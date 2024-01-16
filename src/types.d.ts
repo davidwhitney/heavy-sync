@@ -8,7 +8,7 @@ interface Options {
 }
 
 interface IOutputWriter {
-    save(executionDate: Date, fromTemplate: string): void;
+    save(executionDate: Date, fromTemplate: string): Promise<void>;
 }
 
 interface IOutputFormatter {

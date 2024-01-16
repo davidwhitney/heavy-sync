@@ -88,4 +88,36 @@ describe('index', () => {
         expect(testConfig.outputWriter.data).toContain("track2");
         expect(testConfig.outputWriter.data).toContain("http://tempuri.org/the-url2");
     });
+
+    it('multiple tracks for same artist, most popular returned in output', async () => {
+        const args = { date: new Date("2023-05-28") };
+
+        testConfig.spotifyApi.returnedPlaylistContains([
+            {
+                track: {
+                    name: "track1",
+                    artists: [{ name: "artist1" } as SimplifiedArtist],
+                    album: { name: "album1" } as SimplifiedAlbum,
+                    external_urls: { spotify: "http://tempuri.org/the-url1" },
+                    popularity: 100
+                } as Track,
+                added_at: "2023-05-28"
+            } as PlaylistedTrack,
+            {
+                track: {
+                    name: "track2",
+                    artists: [{ name: "artist1" } as SimplifiedArtist],
+                    album: { name: "album2" } as SimplifiedAlbum,
+                    external_urls: { spotify: "http://tempuri.org/the-url2" },
+                    popularity: 200
+                } as Track,
+                added_at: "2023-05-28"
+            } as PlaylistedTrack
+        ]);
+
+        await main(args, container);
+
+        expect(testConfig.outputWriter.data).not.toContain("track1");
+        expect(testConfig.outputWriter.data).toContain("track2");
+    });
 });
