@@ -14,9 +14,9 @@ jobs:
     env:
       SPOTIFY_CLIENT_ID: 6bfcc6f66396403ebcc9e6582c2d6840
       SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-      GITHUB_REPO: davidwhitney/heavy
-      GITHUB_PATH: HeavyCult.Website/BlogContent
-      GITHUB_PAT: ${{ secrets.GH_PAT }}
+      GH_REPO: davidwhitney/heavy
+      GH_PATH: HeavyCult.Website/BlogContent
+      GH_PAT: ${{ secrets.GH_PAT }}
       OUTPUTWRITER: GitHubOutputWriter
     steps:
       - uses: actions/checkout@v3
