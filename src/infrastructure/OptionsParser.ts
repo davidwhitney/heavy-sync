@@ -2,20 +2,9 @@ import { Options } from "../types";
 import commandLineArgs from 'command-line-args';
 
 export function parseOptions(args: string[]): Options {
-    let options: Options;
-
-    try {
-        // This fails to load in function apps, but that's fine
-        // because we'll be using the current date anyway.
-
-        const parsed: Options = commandLineArgs([
-            { name: 'run', alias: 'r', type: Boolean },
-            { name: 'date', type: (x: string) => parseDate(x) }
-        ], { argv: args });
-        options = parsed;
-    } catch (e) {
-        options = { date: undefined, run: false };
-    }
+    const options: Options = commandLineArgs([
+        { name: 'date', type: (x: string) => parseDate(x) }
+    ], { argv: args });
 
     if (!options.date) {
         const endOfToday = new Date();

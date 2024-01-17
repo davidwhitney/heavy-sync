@@ -12,10 +12,6 @@ container.addModule(new ContainerConfiguration());
 
 const options: Options = parseOptions(process.argv);
 
-if (options.run) {
-    main(options, container).then(code => process.exit(code));
-}
-
 export async function main(args: Options, currentContainer: Container): Promise<number> {
     const generator = currentContainer.get<RecommendationGenerator>(RecommendationGenerator);
     const formatter = currentContainer.get<IOutputFormatter>("IOutputFormatter");
@@ -26,4 +22,9 @@ export async function main(args: Options, currentContainer: Container): Promise<
     await writer.save(args.date, fromTemplate);
 
     return 0;
+}
+
+/* istanbul ignore if -- @preserve */
+if (process.env.TEST !== "true") {
+    main(options, container).then(c => process.exit(c));
 }

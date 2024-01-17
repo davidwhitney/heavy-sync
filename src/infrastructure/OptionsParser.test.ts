@@ -2,16 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { parseOptions } from './OptionsParser';
 
 describe('Options parser', () => {
-    it('can parse run flag', async () => {
-        const options = parseOptions([`--run`]);
-        expect(options.run).toBe(true);
-    });
-
-    it('can parse run flag (abbreviated)', async () => {
-        const options = parseOptions([`-r`]);
-        expect(options.run).toBe(true);
-    });
-
     it('can parse a start date', async () => {
         const arg = `--date=20230113`;
 

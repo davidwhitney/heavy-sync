@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.functionapp.js",
   "scripts": {
-    "start": "tsx src/index.ts --run",
+    "start": "tsx src/index.ts",
     "test": "vitest --run",
     "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
     "clean": "rimraf dist"
