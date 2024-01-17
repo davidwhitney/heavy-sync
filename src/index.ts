@@ -23,8 +23,7 @@ export async function main(args: Options, currentContainer: Container): Promise<
 
     const recommendations = await generator.execute(args.date);
     const fromTemplate = formatter.generate(args.date, recommendations);
-    writer.save(args.date, fromTemplate);
+    await writer.save(args.date, fromTemplate);
 
     return 0;
 }
- 

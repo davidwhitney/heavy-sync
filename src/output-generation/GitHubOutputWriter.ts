@@ -23,6 +23,8 @@ export class GitHubOutputWriter implements IOutputWriter {
     }
 
     public async save(executionDate: Date, data: string): Promise<void> {
+        console.log("GitHubOutputWriter: Saving data to GitHub.");
+
         const paddedDate = new String(executionDate.getDate()).padStart(2, "0");
         const paddedMonth = new String(executionDate.getMonth() + 1).padStart(2, "0");
         const fileName = `${executionDate.getFullYear()}${paddedMonth}${paddedDate}-new-music.md`;
@@ -72,6 +74,9 @@ export class GitHubOutputWriter implements IOutputWriter {
         if (!result.ok) {
             const body = await result.json(); //?
             throw new Error(`Failed to save file: ${body.message}`);
+        } else {
+            console.log("GitHubOutputWriter: Saved data to GitHub.");
+            return Promise.resolve();
         }
     }
 }
