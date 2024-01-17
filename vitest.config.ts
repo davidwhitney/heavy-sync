@@ -4,6 +4,7 @@ export default defineConfig({
   root: "src",
   plugins: [],
   test: {
-    globals: true
+    globals: true,
+    exclude: ["**/GitHubOutputWriter.test.ts"],
   },
 });

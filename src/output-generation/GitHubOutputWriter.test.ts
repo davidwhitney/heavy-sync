@@ -4,6 +4,9 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+// Excluded in vitest.config.ts as this writes to GitHub.
+// Left for future debugging.
+
 describe("GitHub output writer", () => {
 
     let sut: GitHubOutputWriter;
