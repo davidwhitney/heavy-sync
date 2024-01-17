@@ -6,6 +6,19 @@ export class GitHubOutputWriter implements IOutputWriter {
         private token: string,
         private path: string
     ) {
+
+        if (!repoId) {
+            throw new Error("repoId is required");
+        }
+
+        if (!token) {
+            throw new Error("token is required");
+        }
+
+        if (!path) {
+            throw new Error("path is required");
+        }
+
         console.log("GitHubOutputWriter Created.");
     }
 
