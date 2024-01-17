@@ -18,8 +18,8 @@ export async function main(args: Options, currentContainer: Container): Promise<
     const writer = currentContainer.get<IOutputWriter>("IOutputWriter");
 
     const recommendations = await generator.execute(args.date);
-    const fromTemplate = formatter.generate(args.date, recommendations);
-    await writer.save(args.date, fromTemplate);
+    const output = formatter.format(args.date, recommendations);
+    await writer.save(args.date, output);
 
     return 0;
 }

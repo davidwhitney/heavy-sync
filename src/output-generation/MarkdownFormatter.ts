@@ -1,7 +1,7 @@
 import type { IOutputFormatter, Recommendation } from "../types";
 
 export class MarkdownFormatter implements IOutputFormatter {
-    public generate(date: Date, recommendations: Recommendation[]) {
+    public format(date: Date, recommendations: Recommendation[]) {
         const paddedDate = new String(date.getDate()).padStart(2, "0");
         const paddedMonth = new String(date.getMonth() + 1).padStart(2, "0");
 

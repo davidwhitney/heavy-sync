@@ -18,7 +18,7 @@ Weekly Release Radar 28/05/2023
 A roundup of new releases this week, presented in no particular order.        
 `.trim();
 
-        const result = sut.generate(date, []);
+        const result = sut.format(date, []);
 
         expect(result).toContain(expected);
     });
@@ -33,7 +33,7 @@ Weekly Release Radar 01/01/2023
 A roundup of new releases this week, presented in no particular order.        
 `.trim();
 
-        const result = sut.generate(date, []);
+        const result = sut.format(date, []);
 
         expect(result).toContain(expected);
     });
@@ -48,7 +48,7 @@ Weekly Release Radar 11/11/2023
 A roundup of new releases this week, presented in no particular order.        
 `.trim();
 
-        const result = sut.generate(date, []);
+        const result = sut.format(date, []);
 
         expect(result).toContain(expected);
     });
@@ -57,7 +57,7 @@ A roundup of new releases this week, presented in no particular order.
         const date = new Date("2023-11-11");
         const expected = `album came out this week, check out the track`;
 
-        const result = sut.generate(date, [
+        const result = sut.format(date, [
             { isFromAlbum: true, track: "track", artist: "artist", album: "album", trackData: {} as any, url: "", similarArtists: [] }
         ]);
 
@@ -67,7 +67,7 @@ A roundup of new releases this week, presented in no particular order.
     it("called, only outputs first three similar artists in recommendation", () => {
         const date = new Date("2023-11-11");
 
-        const result = sut.generate(date, [
+        const result = sut.format(date, [
             {
                 isFromAlbum: true, track: "track", artist: "artist", album: "album", trackData: {} as any, url: "", similarArtists: [
                     { name: "artist1" } as any,

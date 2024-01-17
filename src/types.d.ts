@@ -12,7 +12,7 @@ interface IOutputWriter {
 }
 
 interface IOutputFormatter {
-    generate(date: Date, recommendations: Recommendation[]): string;
+    format(date: Date, recommendations: Recommendation[]): string;
 }
 
 interface TracksGroupedByArtist {
