@@ -7,15 +7,11 @@
     "start": "tsx src/index.ts --run",
     "test": "vitest --run",
     "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
-    "build:azure": "tsc --project tsconfig.functionapp.json",
-    "clean": "rimraf dist",
-    "prestart": "npm run clean && npm run build",
-    "start:func": "func start"
+    "clean": "rimraf dist"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@azure/functions": "^4.0.0",
     "@spotify/web-api-ts-sdk": "^1.1.2",
     "command-line-args": "^5.2.1",
     "cruet": "^0.2.1",
@@ -24,7 +20,6 @@
     "typescript": "^5.3.2"
   },
   "devDependencies": {
-    "azure-functions-core-tools": "^4.x",
     "esbuild": "^0.19.11",
     "rimraf": "^5.0.0",
     "vitest": "^0.31.4"
