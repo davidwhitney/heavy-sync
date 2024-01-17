@@ -16,7 +16,7 @@ jobs:
       SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       GITHUB_REPO: davidwhitney/heavy
       GITHUB_PATH: HeavyCult.Website/BlogContent
-      GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+      GITHUB_PAT: ${{ secrets.GH_PAT }}
       OUTPUTWRITER: GitHubOutputWriter
     steps:
       - uses: actions/checkout@v3

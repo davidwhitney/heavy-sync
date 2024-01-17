@@ -25,9 +25,9 @@ export class ContainerConfiguration implements IRegistrationModule {
                     return new FileSystemOutputWriter("./output");
                 case GitHubOutputWriter.name:
                     return new GitHubOutputWriter(
-                        process.env.GITHUB_REPO!,
-                        process.env.GITHUB_PAT!,
-                        process.env.GITHUB_PATH!
+                        process.env.GH_REPO!,
+                        process.env.GH_PAT!,
+                        process.env.GH_PATH!
                     );
                 case InMemoryOutputWriter.name:
                     return new InMemoryOutputWriter();

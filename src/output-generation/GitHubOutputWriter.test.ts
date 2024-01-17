@@ -12,9 +12,9 @@ describe("GitHub output writer", () => {
     let sut: GitHubOutputWriter;
     beforeEach(() => {
         sut = new GitHubOutputWriter(
-            process.env.GITHUB_REPO!,
-            process.env.GITHUB_PAT!,
-            process.env.GITHUB_PATH!,
+            process.env.GH_REPO!,
+            process.env.GH_PAT!,
+            process.env.GH_PATH!,
         );
     });
 
