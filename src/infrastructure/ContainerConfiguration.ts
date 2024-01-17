@@ -17,11 +17,23 @@ export class ContainerConfiguration implements IRegistrationModule {
         container.register(RecommendationGenerator);
         container.register("IOutputFormatter", MarkdownFormatter);
 
-        const supportedWriters = new Map<string, any>();
-        supportedWriters.set("FileSystemWriter", FileSystemOutputWriter);
-        supportedWriters.set("InMemoryWriter", InMemoryOutputWriter);
-        supportedWriters.set("GitHubOutputWriter", GitHubOutputWriter);
+        container.register("IOutputWriter", () => {
+            const writer = process.env.OUTPUTWRITER || InMemoryOutputWriter.name;
 
-        container.register("IOutputWriter", supportedWriters.get(process.env.OUTPUTWRITER!));
+            switch (writer) {
+                case FileSystemOutputWriter.name:
+                    return new FileSystemOutputWriter("./output");
+                case GitHubOutputWriter.name:
+                    return new GitHubOutputWriter(
+                        process.env.GITHUB_REPO!,
+                        process.env.GITHUB_PAT!,
+                        process.env.GITHUB_PATH!
+                    );
+                case InMemoryOutputWriter.name:
+                    return new InMemoryOutputWriter();
+                default:
+                    throw new Error(`No writer found for ${writer}`);
+            }
+        });
     }
 }
